@@ -27,6 +27,8 @@ namespace EVEX_DBIMPORT
                 files = null;
                 files = Directory.GetFiles(folderBrowserDialog1.SelectedPath, "*.xlsx", SearchOption.AllDirectories);
             }
+
+           
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -41,12 +43,15 @@ namespace EVEX_DBIMPORT
                 }
             }
 
+            ExcelUtils eUt = new ExcelUtils();
 
             foreach(ProjectList pl in ListPL)
             {
-                PLParser plParser = new PLParser(pl.getPList().Workbook);
+                ExcelRange range = pl.getPList().Workbook.Worksheets[1].Cells["B1"];
+                //PLParser plParser = new PLParser(pl.getPList().Workbook);
             }
 
         }
+
     }
 }

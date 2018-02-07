@@ -4,11 +4,11 @@ using MySql.Data.MySqlClient;
 
 namespace EVEX_DBIMPORT
 {
-    class DatabaseConnection
+    public class DatabaseConnection
     {
         private string ConnectionString = "Server=localhost;Database=evex_db;Uid=root;";
 
-        private MySqlConnection connection;
+        private static MySqlConnection connection;
 
         public DatabaseConnection()
         {
@@ -24,6 +24,11 @@ namespace EVEX_DBIMPORT
             }
 
             return false;
+        }
+
+        public static MySqlConnection getCon()
+        {
+            return connection;
         }
     }
 }

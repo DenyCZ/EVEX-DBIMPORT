@@ -8,7 +8,7 @@ namespace EVEX_DBIMPORT
 {
     public class General
     {
-        internal DatabaseConnection con;
+        public DatabaseConnection con;
 
         public General()
         {
@@ -24,7 +24,6 @@ namespace EVEX_DBIMPORT
             }
 
         }
-
          
     }
 }
