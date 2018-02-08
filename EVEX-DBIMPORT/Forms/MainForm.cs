@@ -10,13 +10,13 @@ namespace EVEX_DBIMPORT
     {
         private string[] files;
         public General general;
-        private List<ProjectList> ListPL;
+        private List<ProjectListWS> ListPL;
 
         public Form1()
         {
             InitializeComponent();
             general = new General();
-            ListPL = new List<ProjectList>();
+            ListPL = new List<ProjectListWS>();
 
         }
 
@@ -33,22 +33,24 @@ namespace EVEX_DBIMPORT
 
         private void button2_Click(object sender, EventArgs e)
         {
+            files = null;
+            files = Directory.GetFiles("D:\\ITIM\\EVEX", "*.xlsx", SearchOption.AllDirectories);
+
             ListPL.Clear();
 
-            foreach(string file in files)
+            foreach (string file in files)
             {
-                if(file.Contains("_PL_") && !file.Contains("kopie"))
+                if (file.Contains("_PL_") && !file.Contains("kopie"))
                 {
-                    ListPL.Add(new ProjectList(new ExcelPackage(new FileInfo(file))));
+                    ListPL.Add(new ProjectListWS(new ExcelPackage(new FileInfo(file))));
                 }
             }
 
             ExcelUtils eUt = new ExcelUtils();
 
-            foreach(ProjectList pl in ListPL)
+            foreach (ProjectListWS pl in ListPL)
             {
-                ExcelRange range = pl.getPList().Workbook.Worksheets[1].Cells["B1"];
-                //PLParser plParser = new PLParser(pl.getPList().Workbook);
+                PLParser plParser = new PLParser(pl.getPList().Workbook);
             }
 
         }

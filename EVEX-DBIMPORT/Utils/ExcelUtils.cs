@@ -1,5 +1,6 @@
 ﻿using OfficeOpenXml;
 using System;
+using System.Globalization;
 
 namespace EVEX_DBIMPORT
 {
@@ -9,12 +10,15 @@ namespace EVEX_DBIMPORT
 
         public string GetString(ExcelRange origin, int left, int top, ExcelWorksheet ws)
         {
-            string jednaBunka = origin.ToString().Split(':')[0];
 
-            char pismeno = jednaBunka.Length == 2 ? jednaBunka.ToCharArray()[0] : '\0';
+            string jednaBunka = origin.ToString().Contains(":") ? origin.ToString().Split(':')[0] : origin.ToString();
+
+            char pismeno = jednaBunka.Length == 2 || jednaBunka.Length == 3 ? jednaBunka.ToCharArray()[0] : '\0';
             char cislo = jednaBunka.Length == 2 ? jednaBunka.ToCharArray()[1] : '\0';
+            int cisloD = jednaBunka.Length == 3 ? int.Parse(jednaBunka.Substring(1, 2)) : 0;
 
-            int cisloN = int.Parse(cislo.ToString()) + top;
+
+            int cisloN = cislo != '\0' ? int.Parse(cislo.ToString()) + top : cisloD+top;
             int pismenoN = int.Parse(((int)pismeno).ToString()) + left;
 
             string final = Convert.ToChar(pismenoN) + cisloN.ToString();
@@ -64,6 +68,44 @@ namespace EVEX_DBIMPORT
             bool isLong = long.TryParse(GetString(origin, left, top, ws), out long dump);
 
             return isLong ? dump as long? : null;
+        }
+
+        public DateTime? GetDate(ExcelRange origin, int left, int top, ExcelWorksheet ws)
+        {
+            string[] formats = { "d.M.yyyy", "dd.MM.yyyy", "d.MM.yyyy", "dd.M.yyyy", "dd.MM.yyyy hh:mm:ss", "dd.MM.yyyy h:mm:ss", "dd.M.yyyy h:mm:ss" };
+
+            bool isDate = DateTime.TryParseExact(GetString(origin, left, top, ws), formats , null, DateTimeStyles.None ,out DateTime dump);
+
+            return isDate ? dump as DateTime? : null;
+        }
+
+        public int? GetRow(ExcelAddress address)
+        {
+            string adresa = address.ToString();
+            bool isNumber;
+
+            if(adresa.Length == 2)
+            {
+                isNumber = int.TryParse(adresa.Substring(1, 1), out int dump);
+                return isNumber ? dump as int? : null;
+            } else if(adresa.Length == 3)
+            {
+                isNumber = int.TryParse(adresa.Substring(1, 2), out int dump);
+                return isNumber ? dump as int? : null;
+            }
+
+
+            return null;
+        }
+
+        public int? GetColumn(ExcelAddress address)
+        {
+            string adresa = address.ToString();
+
+            char sloupec = adresa.ToCharArray()[0];
+            int sloupecAscii = int.Parse(((int)sloupec).ToString())-64;
+
+            return sloupecAscii;
         }
     }
 }

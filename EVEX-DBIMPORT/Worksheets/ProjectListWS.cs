@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace EVEX_DBIMPORT
 {
-    public class ProjectList
+    public class ProjectListWS
     {
         private ExcelPackage PList;
 
-        public ProjectList(ExcelPackage projectList)
+        public ProjectListWS(ExcelPackage projectList)
         {
             this.PList = projectList;
         }
